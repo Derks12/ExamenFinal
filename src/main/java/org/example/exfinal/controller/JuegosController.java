@@ -55,6 +55,18 @@ public class JuegosController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseMap);
     }
 
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<HashMap<String, String >> gestionException(HttpServletRequest request) {
+
+        HashMap<String, String> responseMap = new HashMap<>();
+        if(request.getMethod().equals("POST")) {
+            responseMap.put("estado", "error");
+            responseMap.put("mensaje", "parámetros incorrectos");
+        }
+        return ResponseEntity.badRequest().body(responseMap);
+    }
+
+
 
 
     @PutMapping(value = {"actualizar"}, consumes={MediaType.APPLICATION_JSON_VALUE})
@@ -98,10 +110,9 @@ public class JuegosController {
                 return ResponseEntity.status(HttpStatus.OK).body(responseMap);
             } else {
                 responseMap.put("resultado", "error");
-                responseMap.put("mensaje", "No existe un juego con ese id");
+                responseMap.put("mensaje", "parámetros incorrectos");
                 return ResponseEntity.badRequest().body(responseMap);
             }
-
 
         } else {
             responseMap.put("resultado", "error");
